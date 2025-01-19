@@ -1,0 +1,34 @@
+from flask import Flask, jsonify
+import psycopg2
+import redis
+
+app = Flask(__name__)
+
+# Настройки для PostgreSQL и Redis
+POSTGRES_HOST = 'localhost'
+POSTGRES_DB = 'your_database'
+POSTGRES_USER = 'your_username'
+POSTGRES_PASSWORD = 'your_password'
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
+# Подключение к PostgreSQL
+def get_postgres_connection():
+    return psycopg2.connect(
+        host=POSTGRES_HOST,
+        database=POSTGRES_DB,
+        user=POSTGRES_USER,
+        password=POSTGRES_PASSWORD
+    )
+
+# Подключение к Redis
+redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"message": "pong"}), 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+# Источник кода rugpt.io
